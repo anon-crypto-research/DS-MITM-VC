@@ -1,0 +1,20 @@
+Experiment 1: CT1 value-constraint probability
+cipher: SKINNY-64-64, r_dist=6, A={12}, B={7}, s=3
+trials: 1048576 = 2^{20}
+expected probability for a fixed 3-nibble prefix: 2^{-12}
+
+prefix (0, 0, 0):
+  hits: 0/1048576
+  observed probability: 0 (no hit; one-hit resolution 2^{-20})
+  expected probability: 2^{-12}
+  observed/expected: 0.0000
+  z-score: -16.002
+  note: no hit observed; this illustrates the visible non-uniformity of the short 6-round core
+
+prefix (7, 11, 12):
+  hits: 277/1048576
+  observed probability: 2^{-11.89}
+  expected probability: 2^{-12}
+  observed/expected: 1.0820
+  z-score: 1.313
+  note: reachable prefix used by Experiment 2 for key-recovery validation

@@ -1,0 +1,354 @@
+{
+  "experiment": "experiment2_reduced_attack_filtering",
+  "cipher": "SKINNY-64-64",
+  "round_split": "0+6+2",
+  "active_input_cell_A": 12,
+  "output_cell_B": 7,
+  "constraint_prefix": [
+    7,
+    11,
+    12
+  ],
+  "constraint_prefix_text": "(7, 11, 12)",
+  "guessed_master_cell": 15,
+  "requested_valid_trials": 64,
+  "valid_trials": 64,
+  "attempts": 267773,
+  "seed": 20260707,
+  "empirical_constraint_probability": 0.00023900841384306856,
+  "empirical_constraint_probability_log2": -12.030650973075605,
+  "empirical_constraint_probability_text": "2^{-12.03}",
+  "expected_constraint_probability": 0.000244140625,
+  "expected_constraint_probability_log2": -12,
+  "expected_constraint_probability_text": "2^{-12}",
+  "attempts_per_valid_delta_set": 4183.953125,
+  "attempts_per_valid_delta_set_log2": 12.030650973075605,
+  "attempts_per_valid_delta_set_text": "2^{12.03}",
+  "plaintexts_per_delta_set": 16,
+  "plaintexts_per_delta_set_text": "2^{4}",
+  "average_data_search_cost": 66943.25,
+  "average_data_search_cost_log2": 16.030650973075605,
+  "average_data_search_cost_text": "2^{16.03}",
+  "model_prediction": {
+    "data_complexity_text": "2^{16}",
+    "online_time_complexity_text": "2^{16}"
+  },
+  "correct_retained": 64,
+  "correct_retention_rate": 1.0,
+  "wrong_survivors": 0,
+  "survivor_histogram": {
+    "1": 64
+  },
+  "examples": [
+    {
+      "attempt": 4888,
+      "true_guess": 11,
+      "survivors": [
+        11
+      ],
+      "key": [
+        8,
+        11,
+        14,
+        10,
+        4,
+        4,
+        11,
+        13,
+        8,
+        3,
+        3,
+        4,
+        12,
+        15,
+        15,
+        11
+      ],
+      "base_state": [
+        2,
+        14,
+        0,
+        0,
+        7,
+        5,
+        11,
+        3,
+        4,
+        15,
+        9,
+        8,
+        8,
+        5,
+        2,
+        8
+      ],
+      "sequence_prefix": [
+        7,
+        11,
+        12
+      ],
+      "sequence_suffix": [
+        10,
+        14,
+        1,
+        15,
+        9,
+        5,
+        6,
+        4,
+        13,
+        8,
+        2,
+        3
+      ]
+    },
+    {
+      "attempt": 7067,
+      "true_guess": 0,
+      "survivors": [
+        0
+      ],
+      "key": [
+        9,
+        0,
+        14,
+        15,
+        12,
+        12,
+        14,
+        15,
+        3,
+        15,
+        3,
+        14,
+        9,
+        12,
+        15,
+        0
+      ],
+      "base_state": [
+        10,
+        14,
+        13,
+        12,
+        1,
+        10,
+        3,
+        10,
+        11,
+        14,
+        1,
+        0,
+        12,
+        4,
+        6,
+        1
+      ],
+      "sequence_prefix": [
+        7,
+        11,
+        12
+      ],
+      "sequence_suffix": [
+        1,
+        8,
+        2,
+        3,
+        4,
+        5,
+        13,
+        6,
+        10,
+        14,
+        9,
+        15
+      ]
+    },
+    {
+      "attempt": 7936,
+      "true_guess": 13,
+      "survivors": [
+        13
+      ],
+      "key": [
+        15,
+        9,
+        8,
+        8,
+        0,
+        3,
+        5,
+        12,
+        12,
+        3,
+        12,
+        13,
+        5,
+        11,
+        3,
+        13
+      ],
+      "base_state": [
+        14,
+        8,
+        2,
+        7,
+        4,
+        14,
+        1,
+        3,
+        4,
+        11,
+        2,
+        10,
+        5,
+        7,
+        10,
+        9
+      ],
+      "sequence_prefix": [
+        7,
+        11,
+        12
+      ],
+      "sequence_suffix": [
+        2,
+        8,
+        13,
+        10,
+        1,
+        14,
+        9,
+        15,
+        6,
+        3,
+        5,
+        4
+      ]
+    },
+    {
+      "attempt": 8373,
+      "true_guess": 10,
+      "survivors": [
+        10
+      ],
+      "key": [
+        0,
+        2,
+        0,
+        9,
+        6,
+        13,
+        0,
+        6,
+        5,
+        2,
+        14,
+        1,
+        4,
+        4,
+        14,
+        10
+      ],
+      "base_state": [
+        13,
+        6,
+        5,
+        3,
+        13,
+        15,
+        4,
+        3,
+        7,
+        14,
+        15,
+        8,
+        14,
+        3,
+        4,
+        4
+      ],
+      "sequence_prefix": [
+        7,
+        11,
+        12
+      ],
+      "sequence_suffix": [
+        2,
+        13,
+        15,
+        3,
+        8,
+        9,
+        5,
+        1,
+        6,
+        14,
+        4,
+        10
+      ]
+    },
+    {
+      "attempt": 8885,
+      "true_guess": 14,
+      "survivors": [
+        14
+      ],
+      "key": [
+        12,
+        7,
+        6,
+        8,
+        8,
+        0,
+        6,
+        9,
+        11,
+        0,
+        1,
+        0,
+        5,
+        1,
+        0,
+        14
+      ],
+      "base_state": [
+        13,
+        6,
+        7,
+        8,
+        9,
+        10,
+        1,
+        14,
+        14,
+        6,
+        5,
+        0,
+        4,
+        0,
+        0,
+        2
+      ],
+      "sequence_prefix": [
+        7,
+        11,
+        12
+      ],
+      "sequence_suffix": [
+        14,
+        9,
+        2,
+        10,
+        6,
+        4,
+        8,
+        1,
+        3,
+        5,
+        15,
+        13
+      ]
+    }
+  ]
+}

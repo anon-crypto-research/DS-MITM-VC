@@ -1,0 +1,12 @@
+Experiment 2: reduced 0+6+2 filtering validation
+cipher: SKINNY-64-64, A={12}, B={7}, s=3
+fixed reachable CT1 prefix: (7, 11, 12)
+model prediction: Data=2^{16}, Online=2^{16}
+valid constrained delta-sets: 64 found in 267773 attempts
+empirical constraint probability: 2^{-12.03} (2.39008414e-04)
+expected CT1 probability: 2^{-12} (2.44140625e-04)
+attempts per valid delta-set: 4183.95 = 2^{12.03}
+average data/online-search cost: 66943.25 = 2^{16.03}
+correct key-nibble retained: 64/64
+wrong surviving key-nibble guesses: 0
+survivor histogram: {'1': 64}
