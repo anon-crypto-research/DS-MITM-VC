@@ -1132,7 +1132,7 @@ if __name__ == "__main__":
         block_size=64,
         r_dist=6,
         r_in=0,
-        r_out=2,
+        r_out=4,
         mx_obj=0,
         mx_off=0,
         mx_on=0,

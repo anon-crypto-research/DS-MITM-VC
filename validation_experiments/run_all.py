@@ -42,6 +42,17 @@ def main() -> None:
         ],
     )
     run(
+        "Experiment 1c: 10-round random prefix distribution",
+        [
+            sys.executable,
+            "experiment1_value_constraint/run_prefix_distribution.py",
+            "--rounds",
+            "10",
+            "--trials",
+            str(1 << 20),
+        ],
+    )
+    run(
         "Experiment 2: reduced 0+6+2 key-recovery attack validation",
         [
             sys.executable,

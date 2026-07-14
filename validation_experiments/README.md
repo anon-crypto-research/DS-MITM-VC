@@ -28,7 +28,7 @@ validation scripts do not.
 | `experiment_utils.py` | Shared formatting, parsing, and JSON helpers. |
 | `milp_skinny.py` | Reduced copy of the MILP model that produced `results/output`; not needed for re-running the validation. |
 | `results/output` | MILP-selected small instance and variable dump. |
-| `experiment1_value_constraint/` | Prefix-probability and exhaustive sequence-distribution experiments. |
+| `experiment1_value_constraint/` | Prefix-probability, all-prefix random distribution, and exhaustive sequence-distribution experiments. |
 | `experiment2_reduced_attack/` | Oracle-style reduced key-recovery validation. |
 | `run_all.py` | Regenerates all experiment summaries and JSON result files. |
 
@@ -46,6 +46,8 @@ This regenerates:
 - `experiment1_value_constraint/summary.txt`;
 - `experiment1_value_constraint/sequence_distribution.json`;
 - `experiment1_value_constraint/sequence_distribution_summary.txt`;
+- `experiment1_value_constraint/prefix_distribution_r10.json`;
+- `experiment1_value_constraint/prefix_distribution_r10_summary.txt`;
 - `experiment2_reduced_attack/results.json`;
 - `experiment2_reduced_attack/summary.txt`.
 
@@ -54,6 +56,7 @@ Individual experiments can also be run directly:
 ```bash
 python3 experiment1_value_constraint/run_experiment.py
 python3 experiment1_value_constraint/run_sequence_distribution.py
+python3 experiment1_value_constraint/run_prefix_distribution.py
 python3 experiment2_reduced_attack/run_experiment.py
 ```
 
@@ -100,6 +103,22 @@ The idealized value-constraint estimate is `2^{-12}` for a fixed 3-nibble
 prefix.  The exhaustive result shows why this small instance is not exactly
 ideal: only `15 * 14 * 13 = 2730` of the 4096 possible prefixes are reachable,
 and the reachable buckets are not uniform.
+
+As an additional diagnostic, `experiment1_value_constraint/run_prefix_distribution.py`
+keeps `A={12}`, `B={7}`, and prefix length 3, but increases the middle core to
+`r_dist=10` and samples all 4096 prefix buckets.  With `2^{20}` random trials,
+all buckets are non-empty and the hit-count distribution is close to the
+uniform expectation of 256 hits per prefix:
+
+| Quantity | Value |
+| --- | ---: |
+| Non-empty prefix buckets | 4096/4096 |
+| Min / max hits | 195 / 317 |
+| Mean / stddev hits | 256.00 / 16.09 |
+| Reduced chi-square vs uniform | 1.0121 |
+| `(0, 0, 0)` hits | 254 = about `2^{-12.01}` |
+| `(7, 11, 12)` hits | 268 = about `2^{-11.93}` |
+| `(5, 1, 4)` hits | 246 = about `2^{-12.06}` |
 
 ## Experiment 2: reduced key recovery
 

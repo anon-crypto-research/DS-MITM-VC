@@ -3,7 +3,7 @@
 This directory contains the value-constraint validation for the reduced
 SKINNY-64-64 small instance selected in `../results/output`.
 
-Parameters:
+The MILP-selected 6-round experiments use:
 
 - `r_dist = 6`;
 - active input cell `A = {12}`;
@@ -11,11 +11,16 @@ Parameters:
 - prefix length `s = 3` nibbles;
 - idealized probability for a fixed 3-nibble prefix: `2^{-12}`.
 
-There are two complementary scripts:
+The additional 10-round diagnostic keeps `A={12}`, `B={7}`, and `s=3`, but
+sets `r_dist = 10` and samples all 4096 prefix buckets.
+
+There are three complementary scripts:
 
 - `run_experiment.py` performs random sampling of full keys and base states;
 - `run_sequence_distribution.py` exhaustively enumerates the six
-  value-relevant Z nibbles from the MILP output.
+  value-relevant Z nibbles from the MILP output;
+- `run_prefix_distribution.py` performs a 10-round random test over all
+  3-nibble prefixes.
 
 ## Random prefix sampling
 
@@ -49,6 +54,67 @@ Outputs:
 
 - `results.json`: machine-readable sampling statistics and examples;
 - `summary.txt`: compact text summary.
+
+## 10-round all-prefix random distribution
+
+Run:
+
+```bash
+python3 run_prefix_distribution.py
+```
+
+Default command:
+
+```bash
+python3 run_prefix_distribution.py --rounds 10 --trials 1048576
+```
+
+This test samples random master keys and base states, computes the first three
+output differences at `B=7`, and counts all 4096 possible prefixes.  It is a
+diagnostic comparison against the visibly non-uniform 6-round core; it is not
+the MILP-selected `0+6+2` reduced attack instance.
+
+Default-seed results:
+
+| Quantity | Value |
+| --- | ---: |
+| Trials | `2^{20}` |
+| Expected hits per prefix | 256 = `2^8` |
+| Non-empty prefixes | 4096/4096 |
+| Empty prefixes | 0/4096 |
+| Min / max hits | 195 / 317 |
+| Mean / stddev hits | 256.00 / 16.09 |
+| Expected per-prefix stddev | 16.00 |
+| Reduced chi-square vs uniform | 1.0121 |
+| Largest absolute z-score | 3.813 at `(6, 3, 2)` |
+
+Selected prefixes:
+
+| Prefix | Hits | Observed probability |
+| --- | ---: | ---: |
+| `(0, 0, 0)` | 254 | `2^{-12.01}` |
+| `(7, 11, 12)` | 268 | `2^{-11.93}` |
+| `(5, 1, 4)` | 246 | `2^{-12.06}` |
+
+Hit-count quantiles:
+
+| Quantile | Hits |
+| --- | ---: |
+| 0% | 195 |
+| 1% | 220 |
+| 5% | 230 |
+| 25% | 245 |
+| 50% | 256 |
+| 75% | 266 |
+| 95% | 283 |
+| 99% | 294 |
+| 100% | 317 |
+
+Outputs:
+
+- `prefix_distribution_r10.json`: all 4096 prefix buckets and distribution
+  statistics;
+- `prefix_distribution_r10_summary.txt`: compact text summary.
 
 ## Exhaustive sequence distribution
 

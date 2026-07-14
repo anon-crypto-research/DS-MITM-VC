@@ -1,0 +1,71 @@
+Experiment 1c: random prefix distribution
+cipher: SKINNY-64-64, r_dist=10, A={12}, B={7}, s=3
+trials: 1048576 = 2^{20}
+prefix buckets: 4096
+expected hits per prefix under uniformity: 256.00 = 2^{8}
+expected probability per prefix: 2^{-12}
+
+aggregate distribution:
+  non-empty prefixes: 4096/4096
+  empty prefixes: 0/4096
+  min hits: 195
+  max hits: 317
+  empirical mean hits: 256.00
+  empirical stddev hits: 16.09
+  expected per-prefix stddev: 16.00
+  reduced chi-square vs uniform: 1.0121
+  largest absolute z-score: 3.813 at (6, 3, 2)
+
+hit-count quantiles:
+  0%: 195
+  1%: 220
+  5%: 230
+  25%: 245
+  50%: 256
+  75%: 266
+  95%: 283
+  99%: 294
+  100%: 317
+
+hit-count range histogram (width=16):
+  192-207: 4 prefixes
+  208-223: 76 prefixes
+  224-239: 550 prefixes
+  240-255: 1372 prefixes
+  256-271: 1426 prefixes
+  272-287: 551 prefixes
+  288-303: 111 prefixes
+  304-319: 6 prefixes
+
+selected prefixes:
+  (0, 0, 0): hits=254, probability=2^{-12.01}
+  (7, 11, 12): hits=268, probability=2^{-11.93}
+  (5, 1, 4): hits=246, probability=2^{-12.06}
+
+top 12 prefixes by hits:
+  (6, 3, 2): hits=317, probability=2^{-11.69}
+  (2, 3, 6): hits=312, probability=2^{-11.71}
+  (15, 15, 13): hits=309, probability=2^{-11.73}
+  (8, 6, 14): hits=308, probability=2^{-11.73}
+  (5, 14, 9): hits=308, probability=2^{-11.73}
+  (7, 9, 1): hits=306, probability=2^{-11.74}
+  (0, 12, 2): hits=303, probability=2^{-11.76}
+  (14, 12, 1): hits=303, probability=2^{-11.76}
+  (3, 10, 5): hits=302, probability=2^{-11.76}
+  (8, 9, 6): hits=301, probability=2^{-11.77}
+  (12, 5, 13): hits=300, probability=2^{-11.77}
+  (5, 2, 11): hits=300, probability=2^{-11.77}
+
+bottom 12 prefixes by hits:
+  (11, 7, 7): hits=195, probability=2^{-12.39}
+  (10, 0, 0): hits=198, probability=2^{-12.37}
+  (4, 7, 11): hits=203, probability=2^{-12.33}
+  (11, 11, 11): hits=204, probability=2^{-12.33}
+  (1, 8, 13): hits=209, probability=2^{-12.29}
+  (4, 12, 2): hits=211, probability=2^{-12.28}
+  (4, 1, 3): hits=211, probability=2^{-12.28}
+  (4, 6, 12): hits=211, probability=2^{-12.28}
+  (5, 12, 12): hits=211, probability=2^{-12.28}
+  (12, 11, 4): hits=212, probability=2^{-12.27}
+  (5, 9, 4): hits=214, probability=2^{-12.26}
+  (2, 13, 10): hits=214, probability=2^{-12.26}
