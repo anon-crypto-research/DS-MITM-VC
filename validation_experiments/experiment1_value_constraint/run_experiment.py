@@ -5,10 +5,11 @@ This experiment measures how often a fixed 3-nibble prefix appears in the
 difference sequence at cell B={7}, when the input delta-set is active only at
 cell A={12}.  The idealized per-prefix probability is 2^{-12}.
 
-The default run deliberately checks both:
+The default run deliberately checks three prefixes:
 
     (0,0,0)    - no hit is observed, illustrating short-round non-uniformity;
-    (7,11,12) - a reachable prefix used by Experiment 2.
+    (7,11,12) - the original reachable reference prefix;
+    (5,1,4)   - the largest bucket in the exhaustive sequence distribution.
 """
 
 from __future__ import annotations
@@ -39,7 +40,7 @@ A_CELL = 12
 B_CELL = 7
 R_DIST = 6
 PREFIX_LEN = 3
-DEFAULT_CONSTRAINTS = ["0,0,0", "7,11,12"]
+DEFAULT_CONSTRAINTS = ["0,0,0", "7,11,12", "5,1,4"]
 DEFAULT_SEED = 20260707
 
 
@@ -50,7 +51,9 @@ def classify_prefix(prefix: tuple[int, ...], hits: int) -> str:
             "the short 6-round core"
         )
     if prefix == (7, 11, 12):
-        return "reachable prefix used by Experiment 2 for key-recovery validation"
+        return "original reachable reference prefix"
+    if prefix == (5, 1, 4):
+        return "largest bucket in the exhaustive sequence distribution"
     if hits == 0:
         return "no hit observed for this prefix in the sampled trials"
     return "reachable prefix in the sampled trials"
@@ -129,8 +132,9 @@ def main() -> None:
         "prefix_results": prefix_results,
         "main_takeaway": (
             "The all-zero prefix has no hit in this sample, showing that the "
-            "6-round core is visibly non-uniform; the reachable prefix (7,11,12) "
-            "has probability close to 2^{-12} and is used in Experiment 2."
+            "6-round core is visibly non-uniform; the reachable prefixes "
+            "(7,11,12) and (5,1,4) have different observed probabilities, "
+            "matching the exhaustive sequence-distribution picture."
         ),
     }
 

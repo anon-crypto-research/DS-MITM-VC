@@ -1,25 +1,38 @@
-# Reduced SKINNY-64-64 validation experiments
+# Small-instance SKINNY-64-64 validation experiments
 
-This directory contains two small executable experiments added for the ToSC
-review response.  They validate, on a practical reduced-round instance, that the
-MILP output can be translated into an executable filtering procedure and that
-the observed cost is consistent with the predicted exponents.
+This directory is a self-contained validation package for a reduced
+SKINNY-64-64 instance.  It is intended for code release and reviewer inspection:
+the scripts translate one MILP-selected small instance into executable
+experiments, then record the observed value-constraint and key-recovery
+behavior.
 
-The reduced case is the 0+6+2 SKINNY-64-64 setting recorded in
-`results/output`:
+The reduced instance comes from `results/output`:
 
-- `r_in = 0`, `r_dist = 6`, `r_out = 2`
-- active input cell `A = {12}`
-- output cell `B = {7}`
-- three CT1 value constraints, with expected probability `2^{-12}`
-- one online-guessed master-key nibble
-- model prediction: `Data = 2^{16}`, `Online = 2^{16}`
+- round split: `r_in = 0`, `r_dist = 6`, `r_out = 2`;
+- active input cell: `A = {12}`;
+- observed output cell: `B = {7}`;
+- CT1 value constraints: `Val_Con = 3`;
+- online key recovery target: one master-key nibble, `Key = Kg = 1`;
+- MILP prediction for the reduced instance: `Data = 2^{16}`,
+  `Online = 2^{16}`.
 
-The validation scripts use only the Python standard library.  Re-running
-`milp_skinny.py` requires the original MILP/Gurobi environment, but these
-experiments do not.
+The experiments use only the Python standard library.  Re-running
+`milp_skinny.py` requires the original MILP/Gurobi environment, but the
+validation scripts do not.
 
-## Run
+## Directory layout
+
+| Path | Purpose |
+| --- | --- |
+| `skinny64.py` | Minimal SKINNY-64-64 implementation used by the experiments. |
+| `experiment_utils.py` | Shared formatting, parsing, and JSON helpers. |
+| `milp_skinny.py` | Reduced copy of the MILP model that produced `results/output`; not needed for re-running the validation. |
+| `results/output` | MILP-selected small instance and variable dump. |
+| `experiment1_value_constraint/` | Prefix-probability and exhaustive sequence-distribution experiments. |
+| `experiment2_reduced_attack/` | Oracle-style reduced key-recovery validation. |
+| `run_all.py` | Regenerates all experiment summaries and JSON result files. |
+
+## Reproduce the results
 
 From this directory:
 
@@ -27,50 +40,109 @@ From this directory:
 python3 run_all.py
 ```
 
-or run each experiment separately:
+This regenerates:
+
+- `experiment1_value_constraint/results.json`;
+- `experiment1_value_constraint/summary.txt`;
+- `experiment1_value_constraint/sequence_distribution.json`;
+- `experiment1_value_constraint/sequence_distribution_summary.txt`;
+- `experiment2_reduced_attack/results.json`;
+- `experiment2_reduced_attack/summary.txt`.
+
+Individual experiments can also be run directly:
 
 ```bash
 python3 experiment1_value_constraint/run_experiment.py
+python3 experiment1_value_constraint/run_sequence_distribution.py
 python3 experiment2_reduced_attack/run_experiment.py
 ```
 
-The scripts overwrite their local `results.json` and `summary.txt` files.
+The scripts overwrite their local result files.
 
-## Experiment 1: value-constraint probability
+## Experiment 1: value-constraint behavior
 
-`experiment1_value_constraint` checks how often the first three differences at
-cell `B=7` after the 6-round core equal a fixed CT1 prefix.
+`experiment1_value_constraint/run_experiment.py` samples random master keys and
+base states, then measures how often the 6-round output-difference prefix at
+cell `B=7` equals a fixed 3-nibble value.
 
-By default it tests two prefixes:
+With the default seed and `2^{20}` trials:
 
-| Prefix | Role | Observed result |
-| --- | --- | --- |
-| `(0, 0, 0)` | sanity check for non-uniformity | no hit in `2^{20}` trials |
-| `(7, 11, 12)` | reachable prefix used by Experiment 2 | `277/2^{20} = 2^{-11.89}` |
+| Prefix | Hits | Observed probability | Comment |
+| --- | ---: | ---: | --- |
+| `(0, 0, 0)` | 0 | no hit at `2^{-20}` resolution | Demonstrates short-round non-uniformity. |
+| `(7, 11, 12)` | 277 | `2^{-11.89}` | Original reachable reference prefix. |
+| `(5, 1, 4)` | 523 | `2^{-10.97}` | Largest prefix bucket in the exhaustive distribution. |
 
-The idealized estimate for a fixed 3-nibble prefix is `2^{-12}`.  The all-zero
-prefix is intentionally included to show that 6-round SKINNY-64 is not behaving
-as an ideal permutation in this short setting.  The reachable prefix
-`(7, 11, 12)` has probability close to the expected scale and is therefore used
-for the executable key-recovery validation.
+`experiment1_value_constraint/run_sequence_distribution.py` exhaustively
+enumerates the six value-relevant Z nibbles selected by the MILP:
 
-## Experiment 2: reduced key-recovery validation
+```text
+Z[0][12], Z[1][3], Z[2][3], Z[3][3], Z[4][3], Z[5][3]
+```
 
-`experiment2_reduced_attack` fixes the reachable prefix `(7, 11, 12)` and runs
-the induced 8-round filtering procedure.  For each valid delta-set, it enumerates
-the model-indicated online master-key nibble and checks which guesses reproduce
-the table sequence after decrypting the last two rounds.
+For each of the `16^6 = 2^{24}` assignments, it computes the full 15-nibble
+ordered output-difference sequence at `B=7` and buckets it by the first three
+differences.
 
-With the default seed, 64 valid constrained delta-sets are found in 267773
-attempts.  In all 64 cases the correct key nibble is retained and no wrong
-key-nibble guess survives.  The average data/online-search cost is
-`2^{16.03}`, close to the model prediction `2^{16}`.
+Key exhaustive-distribution results:
 
-## Interpretation
+| Quantity | Value |
+| --- | ---: |
+| Total assignments | `2^{24}` |
+| Distinct full sequences | 16691380 |
+| Non-empty 3-nibble prefix buckets | 2730/4096 |
+| Empty 3-nibble prefix buckets | 1366/4096 |
+| `(5, 1, 4)` bucket size | 8060 assignments, 8048 distinct sequences |
+| `(7, 11, 12)` bucket size | 4728 assignments, 4716 distinct sequences |
+| `(0, 0, 0)` bucket size | 0 |
 
-These experiments are a sanity check for the implementation and the complexity
-estimate on a fully executable reduced instance.  They are not intended to prove
-that every 6-round SKINNY-64 prefix is uniformly distributed.  On the contrary,
-Experiment 1 explicitly shows visible non-uniformity for the short 6-round core.
-For the longer distinguishers used in the paper, the output behavior is expected
-to be closer to random, making the independence heuristic more reliable.
+The idealized value-constraint estimate is `2^{-12}` for a fixed 3-nibble
+prefix.  The exhaustive result shows why this small instance is not exactly
+ideal: only `15 * 14 * 13 = 2730` of the 4096 possible prefixes are reachable,
+and the reachable buckets are not uniform.
+
+## Experiment 2: reduced key recovery
+
+`experiment2_reduced_attack/run_experiment.py` simulates the reduced
+key-recovery loop for two prefixes, `(5, 1, 4)` and `(7, 11, 12)`.
+
+For each prefix, the script first builds the offline table by enumerating the
+six Z nibbles from Experiment 1.  It then repeats 64 oracle trials:
+
+1. The oracle samples a random master key.
+2. The attacker queries a random `A={12}` delta-set and receives 16 ciphertexts.
+3. The attacker enumerates all 16 guesses for the model-indicated master-key
+   nibble 15.
+4. For each guess, the attacker computes the 6-round sequence at `B=7`.
+5. If the sequence has the selected prefix and is present in the offline table,
+   the attacker submits that nibble to the oracle.
+
+Default-seed results:
+
+| Prefix | Offline table sequences | Correct submitted nibble | Wrong submissions | Average data cost |
+| --- | ---: | ---: | ---: | ---: |
+| `(5, 1, 4)` | 8048 | 64/64 | 0 | `2^{14.85}` |
+| `(7, 11, 12)` | 4716 | 64/64 | 0 | `2^{15.66}` |
+
+The data cost is controlled by the table-hit probability:
+
+```text
+average data cost = 16 / Pr[one queried delta-set produces a table hit].
+```
+
+The larger `(5, 1, 4)` bucket therefore gives lower observed data cost than
+`(7, 11, 12)`.
+
+## Interpretation and scope
+
+These experiments validate the executable pipeline on a deliberately small
+instance: MILP output, value-constraint table construction, and reduced
+key-nibble recovery are consistent with each other.  They should not be read as
+evidence that 6-round SKINNY-64-64 behaves like an ideal permutation.  On the
+contrary, the all-zero prefix and the unequal bucket sizes explicitly show
+short-round non-uniformity.
+
+The key-recovery experiment is also reduced in scope: all key material outside
+the model-indicated online nibble is treated as fixed by the surrounding small
+instance.  The experiment validates recovery of that remaining nibble, not a
+full 64-bit key recovery attack.

@@ -1,12 +1,37 @@
-Experiment 2: reduced 0+6+2 filtering validation
+Experiment 2: reduced 0+6+2 key-recovery attack validation
 cipher: SKINNY-64-64, A={12}, B={7}, s=3
-fixed reachable CT1 prefix: (7, 11, 12)
 model prediction: Data=2^{16}, Online=2^{16}
-valid constrained delta-sets: 64 found in 267773 attempts
-empirical constraint probability: 2^{-12.03} (2.39008414e-04)
-expected CT1 probability: 2^{-12} (2.44140625e-04)
-attempts per valid delta-set: 4183.95 = 2^{12.03}
-average data/online-search cost: 66943.25 = 2^{16.03}
-correct key-nibble retained: 64/64
-wrong surviving key-nibble guesses: 0
-survivor histogram: {'1': 64}
+
+prefix (5, 1, 4):
+  offline table sequences for prefix: 8048
+  attack trials: 64/64
+  delta-set attempts: 118177
+  oracle plaintext queries: 1890832
+  empirical table-hit probability per delta-set: 2^{-10.85} (5.41560541e-04)
+  expected CT1 probability: 2^{-12} (2.44140625e-04)
+  average delta-set attempts per recovered nibble: 1846.52 = 2^{10.85}
+  average data cost: 29544.25 = 2^{14.85}
+  average key-nibble guess tests: 29544.25 = 2^{14.85}
+  correct submitted key nibble: 64/64
+  wrong submitted key nibble: 0
+  ambiguous matching delta-sets: 0
+  candidate histogram: {'1': 64}
+
+prefix (7, 11, 12):
+  offline table sequences for prefix: 4716
+  attack trials: 64/64
+  delta-set attempts: 207799
+  oracle plaintext queries: 3324784
+  empirical table-hit probability per delta-set: 2^{-11.66} (3.07989933e-04)
+  expected CT1 probability: 2^{-12} (2.44140625e-04)
+  average delta-set attempts per recovered nibble: 3246.86 = 2^{11.66}
+  average data cost: 51949.75 = 2^{15.66}
+  average key-nibble guess tests: 51949.75 = 2^{15.66}
+  correct submitted key nibble: 64/64
+  wrong submitted key nibble: 0
+  ambiguous matching delta-sets: 0
+  candidate histogram: {'1': 64}
+
+comparison:
+  (5, 1, 4): data=2^{14.85}, table-hit=2^{-10.85}, correct=64/64
+  (7, 11, 12): data=2^{15.66}, table-hit=2^{-11.66}, correct=64/64

@@ -17,4 +17,12 @@ prefix (7, 11, 12):
   expected probability: 2^{-12}
   observed/expected: 1.0820
   z-score: 1.313
-  note: reachable prefix used by Experiment 2 for key-recovery validation
+  note: original reachable reference prefix
+
+prefix (5, 1, 4):
+  hits: 523/1048576
+  observed probability: 2^{-10.97}
+  expected probability: 2^{-12}
+  observed/expected: 2.0430
+  z-score: 16.690
+  note: largest bucket in the exhaustive sequence distribution
